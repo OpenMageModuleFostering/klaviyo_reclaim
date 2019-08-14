@@ -88,7 +88,7 @@ class Klaviyo_Reclaim_Helper_Data extends Mage_Core_Helper_Data
    */
   public function getPublicApiKey($store=null)
   {
-    return Mage::getStoreConfig(self::XML_PATH_PUBLIC_API_KEY, $store);
+    return Mage::app()->getWebsite($store)->getConfig(self::XML_PATH_PUBLIC_API_KEY);
   }
 
   /**

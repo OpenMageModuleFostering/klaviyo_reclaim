@@ -2,12 +2,12 @@
 <layout version="0.1.0">
     <default>
         <reference name="before_body_end">
-            <block type="klaviyo_reclaim/tracking_default" name="klaviyo_reclaim.tracking_default" template="klaviyoreclaim/tracking/default.phtml" /> 
+            <block type="klaviyo_reclaim/tracking_default" name="klaviyo_reclaim.tracking_default" template="klaviyoreclaim/tracking/default.phtml" />
         </reference>
     </default>
     <catalog_product_view>
         <reference name="before_body_end">
-            <block type="klaviyo_reclaim/tracking_product" name="klaviyo_reclaim.tracking_product" template="klaviyoreclaim/tracking/product.phtml" /> 
+            <block type="klaviyo_reclaim/tracking_product" name="klaviyo_reclaim.tracking_product" template="klaviyoreclaim/tracking/product.phtml" />
         </reference>
     </catalog_product_view>
     <onestepcheckout_index_index>
@@ -15,4 +15,29 @@
             <block type="klaviyo_reclaim/checkout_monitor" name="klaviyo_reclaim.checkout_monitor" template="klaviyoreclaim/checkout/monitor.phtml" />
         </reference>
     </onestepcheckout_index_index>
+    <lotusbreath_onestepcheckout_index_index>
+        <reference name="before_body_end">
+            <block type="klaviyo_reclaim/checkout_monitor" name="klaviyo_reclaim.checkout_monitor" template="klaviyoreclaim/checkout/monitor.phtml" />
+        </reference>
+    </lotusbreath_onestepcheckout_index_index>
+    <checkout_onepage_index>
+        <reference name="before_body_end">
+            <block type="klaviyo_reclaim/checkout_monitor" name="klaviyo_reclaim.checkout_monitor" template="klaviyoreclaim/checkout/monitor.phtml" />
+        </reference>
+    </checkout_onepage_index>
+    <supercheckout_index_index>
+        <reference name="before_body_end">
+            <block type="klaviyo_reclaim/checkout_monitor" name="klaviyo_reclaim.checkout_monitor" template="klaviyoreclaim/checkout/monitor.phtml" />
+        </reference>
+    </supercheckout_index_index>
+    <amscheckout_onepage_index>
+        <reference name="before_body_end">
+            <block type="klaviyo_reclaim/checkout_monitor" name="klaviyo_reclaim.checkout_monitor" template="klaviyoreclaim/checkout/monitor.phtml" />
+        </reference>
+    </amscheckout_onepage_index>
+    <fancycheckout_index_index>
+        <reference name="before_body_end">
+            <block type="klaviyo_reclaim/checkout_monitor" name="klaviyo_reclaim.checkout_monitor" template="klaviyoreclaim/checkout/monitor.phtml" />
+        </reference>
+    </fancycheckout_index_index>
 </layout>

@@ -47,7 +47,17 @@ class Klaviyo_Reclaim_Model_Api
      * @return void
      */
     public function __construct($args) {
-        $private_api_key = (!isset($args['api_key']) ? Mage::helper('klaviyo_reclaim')->getPrivateApiKey() : $args['api_key']);
+        $store_name = Mage::app()->getRequest()->getParam('store');
+
+        if (strlen($store_name)){
+            $store_id = Mage::getModel('core/store')->load($store_name)->getId();
+            $private_api_key = Mage::getStoreConfig('reclaim/general/private_api_key', $store_id);
+        }
+
+        else{
+            $private_api_key = (!isset($args['api_key']) ? Mage::helper('klaviyo_reclaim')->getPrivateApiKey() : $args['api_key']);
+        }
+
         $this->_api = new Klaviyo_Reclaim_Model_KlaviyoApi($private_api_key);
     }
 

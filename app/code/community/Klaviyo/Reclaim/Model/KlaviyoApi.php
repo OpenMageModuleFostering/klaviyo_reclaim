@@ -42,9 +42,9 @@ class Klaviyo_Reclaim_Model_KlaviyoApi
     public $request_params = array();
 
     /**
-     * Connect to the MailChimp API for a given list.
+     * Connect to the Klaviyo API for a given list.
      *
-     * @param string $apikey Your MailChimp apikey
+     * @param string $apikey Your Klaviyo apikey
      * @param string $secure Whether or not this should use a secure connection
      */
     function __construct($api_key, $secure=true) {

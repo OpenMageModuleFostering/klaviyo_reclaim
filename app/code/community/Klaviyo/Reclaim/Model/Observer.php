@@ -15,6 +15,9 @@
  */
 class Klaviyo_Reclaim_Model_Observer
 {
+    const MAX_LINE_ITEMS_WITH_DETAILS = 5;
+    var $tracker_cache = array();
+
     /**
      * Error messages
      *
@@ -27,20 +30,11 @@ class Klaviyo_Reclaim_Model_Observer
      *
      * @return Klaviyo_Reclaim_Model_Observer
      */
-    public function trackQuotes()
-    {
+    public function trackQuotes() {
 
         if (!Mage::helper('klaviyo_reclaim')->isEnabled()) {
             return;
         }
-
-        $public_api_key = Mage::helper('klaviyo_reclaim')->getPublicApiKey();
-
-        if (!$public_api_key) {
-            return;
-        }
-
-        $tracker = new Klaviyo_Reclaim_Model_Tracker($public_api_key);
 
         $this->_errors = array();
         try {
@@ -48,13 +42,13 @@ class Klaviyo_Reclaim_Model_Observer
 
             // Find quotes that are at least 15 minutes old and have been updated in the last 60 minutes.
             $created_window_minutes = 15;
-            
+
             $created_before = Zend_Date::now();
             $created_before->sub($created_window_minutes, Zend_Date::MINUTE);
             $created_before = $adapter->convertDateTime($created_before);
 
             $updated_window_minutes = 60;
-            
+
             $updated_after = Zend_Date::now();
             $updated_after->sub($updated_window_minutes, Zend_Date::MINUTE);
             $updated_after = $adapter->convertDateTime($updated_after);
@@ -67,10 +61,10 @@ class Klaviyo_Reclaim_Model_Observer
             $quotes_tracked = 0;
 
             foreach ($quotes as $quote) {
-                
+                $tracker = self::getTracker($quote);
                 $billing_address = $quote->getBillingAddress();
 
-                if (!$billing_address) {
+                if (!$billing_address || !$tracker) {
                     continue;
                 }
 
@@ -105,6 +99,7 @@ class Klaviyo_Reclaim_Model_Observer
 
                 $item_descriptions = array();
                 $item_details = array();
+                $line_item_count = 0;
                 $item_count = 0;
 
                 $configurable_product_ids = array();
@@ -115,9 +110,10 @@ class Klaviyo_Reclaim_Model_Observer
                     $quote_item_product_name = $quote_item_product->getName();
 
                     for ($i = 0; $i < $quote_item_quantity; $i++) {
-                        $item_descriptions[] = $quote_item_product_name;
                         $item_count++;
                     }
+                    $item_descriptions[] = $quote_item_product_name;
+                    $line_item_count++;
 
                     $product_images = array();
                     foreach ($quote_item_product->getMediaGalleryImages() as $product_image) {
@@ -132,18 +128,20 @@ class Klaviyo_Reclaim_Model_Observer
                         $configurable_product_ids[] = $quote_item_product->getId();
                     }
 
-                    $item_details[] = array(
-                        'quantity' => (float) $quote_item_quantity,
-                        'row_total' => (float) $quote_item->getBaseRowTotal(),
-                        'row_discount' => (float) $quote_item->getBaseDiscountAmount(),
-                        'product' => array(
-                            'id' => $quote_item_product->getId(),
-                            'sku' => $quote_item_product->getSKU(),
-                            'name' => $quote_item_product->getName(),
-                            'price' => (float) $quote_item_product->getPrice(),
-                            'images' => $product_images
-                        )
-                    );
+                    if ($line_item_count <= self::MAX_LINE_ITEMS_WITH_DETAILS) {
+                        $item_details[] = array(
+                            'quantity' => (float) $quote_item_quantity,
+                            'row_total' => (float) $quote_item->getBaseRowTotal(),
+                            'row_discount' => (float) $quote_item->getBaseDiscountAmount(),
+                            'product' => array(
+                                'id' => $quote_item_product->getId(),
+                                'sku' => $quote_item_product->getSKU(),
+                                'name' => $quote_item_product->getName(),
+                                'price' => (float) $quote_item_product->getPrice(),
+                                'images' => $product_images
+                            )
+                        );
+                    }
                 }
 
                 if (!empty($configurable_product_ids)) {
@@ -195,7 +193,9 @@ class Klaviyo_Reclaim_Model_Observer
                 if ($coupon_code) {
                     $totals = $quote->getTotals();
                     $properties['Discount Codes'] = array($coupon_code);
-                    $properties['Total Discounts'] = (float) $totals['discount']->getValue() * -1;
+                    if (array_key_exists('discount', $totals) && is_object($totals['discount'])) {
+                        $properties['Total Discounts'] = (float) $totals['discount']->getValue() * -1;
+                    }
                 }
 
                 $timestamp = strtotime($quote->getUpdatedAt());
@@ -305,5 +305,27 @@ class Klaviyo_Reclaim_Model_Observer
 
     public function syncCustomer (Varien_Event_Observer $observer) {
         // Mage::log($observer);
+    }
+
+    public function getTracker($quote) {
+        $store_id = $quote->getStoreId();
+
+        foreach($this->tracker_cache as $id => $tracker){
+            if($id == $store_id){
+                return $tracker;
+            }
+        }
+
+        $website_id = Mage::getModel('core/store')->load($store_id)->getWebsiteId();
+        $public_api_key = Mage::helper('klaviyo_reclaim')->getPublicApiKey($website_id);
+
+        if(!$public_api_key){
+            return NULL;
+        }
+
+        $tracker =  new Klaviyo_Reclaim_Model_Tracker($public_api_key);
+        $this->tracker_cache[$store_id] = $tracker;
+
+        return $tracker;
     }
 }

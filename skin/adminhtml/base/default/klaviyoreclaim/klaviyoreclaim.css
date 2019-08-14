@@ -1,18 +1,42 @@
-.klaviyo_reclaim_info {
-  background: #fafafc;
-  border: solid 1px #ccc;
-  margin-bottom: 10px;
-  padding: 8px;
+.klaviyo_reclaim {
+  padding: 1em;
+  margin: 1em 0;
+  border: 0 solid #eee;
+  border-left-width: 5px;
+  border-radius: 0;
+  background-color: #f1f9f1;
+  border-left-color: #50b550;
+  color: #50b550;
 }
 
-.klaviyo_reclaim_info h4 {
-  font-size: 15px;
+.klaviyo_reclaim h4 {
+  font-size: 18px;
   line-height: 18px;
   margin: 0 0 2px;
-  color: #1f5f95;
 }
 
-.klaviyo_reclaim_info p {
+.klaviyo_reclaim p {
   margin: 0;
-  color: #666;
+}
+
+.klaviyo_reclaim a {
+  color: #50b550;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.klaviyo_reclaim li {
+  list-style-type: circle;
+  list-style-position: inside;
+}
+
+.klaviyo_reclaim.klaviyo_reclaim_error {
+  background: rgba(231,76,60,.8);
+  border-color: rgba(231,76,60,.9);
+  text-shadow: 0 -1px 0 rgba(51,51,51,.2);
+  color: #fff;
+}
+
+.klaviyo_reclaim.klaviyo_reclaim_error a {
+  color: #fff;
 }

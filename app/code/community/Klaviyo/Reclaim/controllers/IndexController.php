@@ -8,6 +8,9 @@
 
 class Klaviyo_Reclaim_IndexController extends Mage_Core_Controller_Front_Action
 {
+
+  private static $_preservableRequestParams = array('utm_medium', 'utm_source', 'utm_campaign', 'utm_term');
+
   /**
    * Pre dispatch action that allows to redirect to no route page in case of disabled extension through Admin panel
    */
@@ -26,7 +29,8 @@ class Klaviyo_Reclaim_IndexController extends Mage_Core_Controller_Front_Action
    */
   public function viewAction()
   {
-    $checkout_id = $this->getRequest()->getParam('id');
+    $request = $this->getRequest();
+    $checkout_id = $request->getParam('id');
 
     if ($checkout_id) {
       $checkout = Mage::getModel('klaviyo_reclaim/checkout');
@@ -35,28 +39,25 @@ class Klaviyo_Reclaim_IndexController extends Mage_Core_Controller_Front_Action
       if ($checkout->getId()) {
         $saved_quote = Mage::getModel('sales/quote');
         $saved_quote->load($checkout->getQuoteId());
-
         $cart = Mage::getSingleton('checkout/cart');
 
         if ($saved_quote->getId() != $cart->getQuote()->getId() && !$cart->getItemsCount()) {
-          foreach ($saved_quote->getItemsCollection() as $quote_item) {
-            $quote_item_product = Mage::getModel('catalog/product')->load($quote_item->getProduct()->getId());
-
-            // Don't add configurable products for now.
-            if ($quote_item_product->isConfigurable()) {
-              continue;
-            }
-
-            if ($quote_item_product->getId()) {
-              $cart->addProduct($quote_item_product, $quote_item->getQty());
-              $cart->save();
-            }
-          }
+          $cart->getQuote()->load($checkout->getQuoteId());
+          $cart->save();
         }
       }
     }
     
-    $this->_redirectUrl(Mage::getUrl('checkout/cart'));
+    $params = array();
+    foreach (self::$_preservableRequestParams as $key) {
+      $value = $this->getRequest()->getParam($key);
+
+      if ($value) {
+        $params[$key] = $value;
+      }
+    }
+
+    $this->_redirectUrl(Mage::getUrl('checkout/cart', array('_query' => $params)));
   }
 
   /**
@@ -111,7 +112,7 @@ class Klaviyo_Reclaim_IndexController extends Mage_Core_Controller_Front_Action
 
       $is_cron_running = Mage::getModel('cron/schedule')->getCollection()
         ->addFieldToFilter('status', Mage_Cron_Model_Schedule::STATUS_SUCCESS)
-        ->addFieldToFilter('finished_at', $hour_ago)
+        ->addFieldToFilter('finished_at', array('gteq' => $hour_ago))
         ->count() > 0;
 
       $has_reclaim_entries = Mage::getModel('klaviyo_reclaim/checkout')->getCollection()->count() > 0;

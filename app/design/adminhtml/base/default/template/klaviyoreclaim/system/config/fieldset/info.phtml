@@ -3,7 +3,27 @@
  * @see Klaviyo_Reclaim_Block_Adminhtml_System_Config_Fieldset_Hint
  */
 ?>
-<div class="klaviyo_reclaim_info">
+<div class="klaviyo_reclaim">
   <h4>Klaviyo for Magento v<?php echo $this->getKlaviyoVersion(); ?>.</h4>
-  <p>For instructions on configuring Klaviyo, visit the <a href="http://docs.klaviyo.com/" target="_blank">Klaviyo docs</a>.</p>
+  <p>For instructions on configuring Klaviyo, visit the <a href="http://learn.klaviyo.com/12888-magento-integration" target="_blank">Magento getting started guide</a>.</p>
 </div>
+
+<?php $status_key = $this->getKlaviyoExtensionStatus(); ?>
+
+<?php if($status_key[0]) : ?>
+
+    <div class="klaviyo_reclaim klaviyo_reclaim_error">
+        <ul>
+          <?php if(!$status_key[1]) : ?>
+          <li>Please enter your Klaviyo API keys.</li>
+          <?php endif; ?>
+          <?php if(!$status_key[2]) : ?>
+          <li>Magento's cron jobs need to be enabled. Follow this guide for information on enabling them: <a href="http://learn.klaviyo.com/12888-magento-integration/set-up-magento-cron-job" target="_blank">How to Set Up a Magento Cron Job</a></li>
+          <?php endif; ?>
+          <?php if(!$status_key[3]) : ?>
+          <li>There are no entries in the klaviyo_reclaim_checkout table. If you've set up cron jobs and are still seeing this message, email <a href="mailto:success@klaviyo.com">success@klaviyo.com</a></li>
+          <?php endif; ?>
+        </ul>
+    </div>
+
+<?php endif; ?>
