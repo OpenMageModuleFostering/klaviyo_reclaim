@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Klaviyo_Reclaim",
+    "type": "magento-module",
+    "license": "Open-Software-License-(OSL)",
+    "homepage": "",
+    "description": "A Magento connector for Klaviyo eCommerce.",
+    "authors": [
+    {
+        "name": "Klaviyo Team",
+        "email": "support@klaviyo.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

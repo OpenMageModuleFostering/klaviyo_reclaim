@@ -1,0 +1,18 @@
+.klaviyo_reclaim_info {
+  background: #fafafc;
+  border: solid 1px #ccc;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.klaviyo_reclaim_info h4 {
+  font-size: 15px;
+  line-height: 18px;
+  margin: 0 0 2px;
+  color: #1f5f95;
+}
+
+.klaviyo_reclaim_info p {
+  margin: 0;
+  color: #666;
+}

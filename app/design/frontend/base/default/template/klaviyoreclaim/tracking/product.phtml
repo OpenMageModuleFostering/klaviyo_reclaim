@@ -1,0 +1,10 @@
+<?php $_product = $this->getProduct(); ?>
+<script text="text/javascript">
+  var _learnq = _learnq || [];
+ 
+  _learnq.push(['track', 'Viewed Product', {
+    Name: "<?php echo $_product->getName(); ?>",
+    SKU: "<?php echo $_product->getSku(); ?>",
+    Categories: <?php echo $this->getProductCategoriesAsJson(); ?>
+  }]);
+</script>

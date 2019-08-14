@@ -1,0 +1,78 @@
+<script type="text/javascript">
+  KMagento = typeof KMagento !== 'undefined' ? KMagento : {};
+
+  KMagento.CheckoutWatcher = function (options) {
+    options = options || {};
+    options.email_field = options.email_field || 'input[name="billing[email]"]';
+    options.delay_seconds = options.delay_seconds || 3;
+
+    this.options = options;
+  };
+
+  KMagento.CheckoutWatcher.prototype = {
+
+    timer: null,
+
+    watch: function () {
+      var self = this,
+          elements = Prototype.Selector.select(this.options.email_field);
+
+      if (!elements.length) {
+        self.log('Unable to find element matching: ' + this.options.email_field);
+        return;
+      }
+
+      Event.observe(elements[0], 'change', function (e) {
+        if (self.timer) {
+          clearTimeout(self.timer);
+          self.timer = null;
+        }
+
+        var email = Form.Element.getValue(this);
+        if (email) {
+          email = email.strip();
+        }
+        if (!email) {
+          return;
+        }
+
+        self.timer = setTimeout(function () {
+          self.saveEmail(email);
+        }, self.options.delay_seconds * 1000);
+      });
+
+      self.log('Watching: ' + this.options.email_field);
+    },
+
+    saveEmail: function (email) {
+      var self = this,
+          url = '<?php echo $this->getUrl("reclaim/index/saveEmail"); ?>';
+
+      // Use whichever protcol the page is on.
+      url = url.replace('http://', '//').replace('https://', '//');
+
+      var request = new Ajax.Request(url, {
+        method: 'post',
+        parameters: { email: email },
+        onSuccess: function(response) {
+          self.log('saveEmail response: ' + response.responseJSON);
+        }
+      });
+
+      this.log('Tried to save email: ' + email);
+    },
+
+    log: function () {
+      var c = window.console;
+      if (c && typeof c.log === 'function') {
+        c.log.apply(c, arguments);
+      }
+    }
+
+  };
+
+  (function () {
+    var watcher = new KMagento.CheckoutWatcher();
+    watcher.watch();
+  })();
+</script>

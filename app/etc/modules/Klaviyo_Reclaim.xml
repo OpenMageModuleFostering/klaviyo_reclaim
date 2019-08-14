@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Klaviyo_Reclaim>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Newsletter />
+            </depends>
+        </Klaviyo_Reclaim>
+    </modules>
+</config>

@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <reclaim>
+            <label>Klaviyo</label>
+            <tab>customer</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+
+            <groups>
+                <info>
+                    <frontend_model>klaviyo_reclaim/adminhtml_system_config_fieldset_info</frontend_model>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </info>
+
+                <general translate="label">
+                    <label>General Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    
+                    <fields>
+                        <enabled translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled>
+                        <public_api_key translate="label">
+                            <backend_model>klaviyo_reclaim/publicApiKey</backend_model>
+                            <label>Klaviyo Public API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[You can get your <strong>public</strong> API key from <a href="https://www.klaviyo.com/integrations" target="_blank">https://www.klaviyo.com/integrations</a>.]]></comment>
+                        </public_api_key>
+                        <private_api_key translate="label">
+                            <label>Klaviyo Private API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[You can get your <strong>private</strong> API key from <a href="https://www.klaviyo.com/account#api-keys" target="_blank">https://www.klaviyo.com/account#api-keys</a>.]]></comment>
+                        </private_api_key>
+                        <subscription_list translate="label comment">
+                            <label>General Subscription List</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>klaviyo_reclaim/system_config_source_list</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                            <comment>Sync Magento's General Subscription List with this Klaviyo list</comment>
+                        </subscription_list>
+                        <require_double_optin translate="label comment">
+                            <label>Require Double Opt-in</label>
+                            <frontend_type>label</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Normally, this should be <strong>Yes</strong>. Abuse of the double opt-in option may cause your account to be suspended.]]></comment>
+                        </require_double_optin>
+                    </fields>
+                </general>
+            </groups>
+        </reclaim>
+    </sections>
+</config>
