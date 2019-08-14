@@ -24,7 +24,31 @@ class Klaviyo_Reclaim_Helper_Data extends Mage_Core_Helper_Data
    * @var string
    */
   const XML_PATH_PRIVATE_API_KEY = 'reclaim/general/private_api_key';
-  
+
+  /**
+   * Path to store config where OAuth consumer key is stored
+   * @var string
+   */
+  const XML_PATH_CONSUMER_KEY = 'reclaim/general/consumer_key';
+
+  /**
+   * Path to store config where OAuth consumer key is stored
+   * @var string
+   */
+  const XML_PATH_CONSUMER_SECRET = 'reclaim/general/consumer_secret';
+
+  /**
+   * Path to store config where OAuth consumer key is stored
+   * @var string
+   */
+  const XML_PATH_AUTHORIZATION_TOKEN = 'reclaim/general/authorization_token';
+
+  /**
+   * Path to store config where OAuth consumer key is stored
+   * @var string
+   */
+  const XML_PATH_AUTHORIZATION_SECRET = 'reclaim/general/authorization_secret';
+
   /**
    * Path to store config for Klaviyo list to sync Magento general subscription list with.
    * @var string
@@ -36,6 +60,12 @@ class Klaviyo_Reclaim_Helper_Data extends Mage_Core_Helper_Data
    * @var string
    */
   const XML_PATH_USE_KLAVIYO_LIST_NAME = 'reclaim/general/use_klaviyo_list_name';
+
+  /**
+   * Path for klaviyo log file.
+   * @var string
+   */
+  const LOG_FILE_PATH = 'klaviyo.log';
 
   /* For the "etc/adminthtml.xml" file when we implement:
   <use_klaviyo_list_name translate="label comment">
@@ -50,6 +80,52 @@ class Klaviyo_Reclaim_Helper_Data extends Mage_Core_Helper_Data
       <comment><![CDATA[Use Klaviyo list name rather than the Magento default, <i>General Subscription</i>.]]></comment>
   </use_klaviyo_list_name>
   */
+
+  /**
+   * Get configuration value by searching for the most specific setting moving from
+   * store scope to website scope to global scope.
+   *
+   * @param $path
+   * @param integer|string|Mage_Core_Model_Store $store
+   * @param bool $returnParentValueIfNull
+   * @return mixed|null
+   * @throws Mage_Core_Exception
+   */
+  public function getConfigSettingIncludingParents($path, $store=null)
+  {
+      $value = null;
+
+      if (!is_null($store)) {
+        $possible_value = Mage::getStoreConfig($path, $store);
+        if (!is_null($possible_value)) {
+          $value = $possible_value;
+        }
+
+        // If we didn't find a value at the store level, check the website config.
+        if (is_null($value)) {
+          $website = $store->getWebsite();
+
+          // `getWebsite` could return `false` if there's no website associated with the store.
+          // In practice, I'm not sure why this would happen, but Magento allows it.
+          if ($website) {
+            $possible_value = $website->getConfig($path);
+            if (!is_null($possible_value)) {
+              $value = $possible_value;
+            }
+          }
+        }
+      }
+
+      // If we didn't find a value at the store or website level, check the global config.
+      if (is_null($value)) {
+        $possible_value = Mage::getStoreConfig($path);
+        if (!is_null($possible_value)) {
+          $value = $possible_value;
+        }
+      }
+
+      return $value;
+  }
 
   /**
    * Utility for fetching settings for our extension.
@@ -78,9 +154,9 @@ class Klaviyo_Reclaim_Helper_Data extends Mage_Core_Helper_Data
    */
   public function isEnabled($store=null)
   {
-    return Mage::getStoreConfigFlag(self::XML_PATH_ENABLED, $store);
+    return $this->getConfigSettingIncludingParents(self::XML_PATH_ENABLED, $store);
   }
-  
+
   /**
    * Return the Klaviyo Public API key
    * @param integer|string|Mage_Core_Model_Store $store
@@ -88,7 +164,7 @@ class Klaviyo_Reclaim_Helper_Data extends Mage_Core_Helper_Data
    */
   public function getPublicApiKey($store=null)
   {
-    return Mage::app()->getWebsite($store)->getConfig(self::XML_PATH_PUBLIC_API_KEY);
+    return $this->getConfigSettingIncludingParents(self::XML_PATH_PUBLIC_API_KEY, $store);
   }
 
   /**
@@ -98,7 +174,47 @@ class Klaviyo_Reclaim_Helper_Data extends Mage_Core_Helper_Data
    */
   public function getPrivateApiKey($store=null)
   {
-    return Mage::getStoreConfig(self::XML_PATH_PRIVATE_API_KEY, $store);
+    return $this->getConfigSettingIncludingParents(self::XML_PATH_PRIVATE_API_KEY, $store);
+  }
+
+  /**
+   * Return the store's OAuth Consumer Key
+   * @param integer|string|Mage_Core_Model_Store $store
+   * @return string
+   */
+  public function getConsumerKey($store=null)
+  {
+      return $this->getConfigSettingIncludingParents(self::XML_PATH_CONSUMER_KEY, $store);
+  }
+
+  /**
+   * Return the store's OAuth Consumer Secret
+   * @param integer|string|Mage_Core_Model_Store $store
+   * @return string
+   */
+  public function getConsumerSecret($store=null)
+  {
+      return $this->getConfigSettingIncludingParents(self::XML_PATH_CONSUMER_SECRET, $store);
+  }
+
+  /**
+   * Return the store's OAuth Authorization Token
+   * @param integer|string|Mage_Core_Model_Store $store
+   * @return string
+   */
+  public function getAuthorizationToken($store=null)
+  {
+      return $this->getConfigSettingIncludingParents(self::XML_PATH_AUTHORIZATION_TOKEN, $store);
+  }
+
+  /**
+   * Return the store's OAuth Authorization Secret
+   * @param integer|string|Mage_Core_Model_Store $store
+   * @return string
+   */
+  public function getAuthorizationSecret($store=null)
+  {
+      return $this->getConfigSettingIncludingParents(self::XML_PATH_AUTHORIZATION_SECRET, $store);
   }
 
   public function getSubscriptionList($store)
@@ -141,10 +257,55 @@ class Klaviyo_Reclaim_Helper_Data extends Mage_Core_Helper_Data
     return $checkout;
   }
 
+  /**
+   * Set the store's OAuth Consumer Key
+   * @param string
+   * @return void
+   */
+  public function setConsumerKey($consumerKey)
+  {
+      Mage::getModel('core/config')->saveConfig(self::XML_PATH_CONSUMER_KEY, $consumerKey);
+  }
+
+  /**
+   * Set the store's OAuth Consumer Secret
+   * @param string
+   * @return void
+   */
+  public function setConsumerSecret($consumerSecret)
+  {
+      Mage::getModel('core/config')->saveConfig(self::XML_PATH_CONSUMER_SECRET, $consumerSecret);
+  }
+
+  /**
+   * Set the store's OAuth Authorization Token
+   * @param string
+   * @return void
+   */
+  public function setAuthorizationToken($authorizationToken)
+  {
+      Mage::getModel('core/config')->saveConfig(self::XML_PATH_AUTHORIZATION_TOKEN, $authorizationToken);
+  }
+
+  /**
+   * Set the store's OAuth Authroization Secret
+   * @param string
+   * @return void
+   */
+  public function setAuthorizationSecret($authorizationSecret)
+  {
+      Mage::getModel('core/config')->saveConfig(self::XML_PATH_AUTHORIZATION_SECRET, $authorizationSecret);
+  }
+
   public function log($data, $filename)
   {
     if ($this->config('enable_log') != 0) {
       return Mage::getModel('core/log_adapter', $filename)->log($data);
     }
+  }
+
+  public function getLogFile()
+  {
+    return self::LOG_FILE_PATH;
   }
 }

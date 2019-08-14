@@ -26,7 +26,6 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    
                     <fields>
                         <enabled translate="label">
                             <label>Enabled</label>
@@ -45,7 +44,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment><![CDATA[You can get your <strong>public</strong> API key from <a href="https://www.klaviyo.com/integrations" target="_blank">https://www.klaviyo.com/integrations</a>.]]></comment>
+                            <comment><![CDATA[You can get your <strong>public</strong> API key from <a href="https://www.klaviyo.com/account#api-keys-tab" target="_blank">https://www.klaviyo.com/account#api-keys-tab</a>.]]></comment>
                         </public_api_key>
                         <private_api_key translate="label">
                             <label>Klaviyo Private API Key</label>
@@ -54,7 +53,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment><![CDATA[You can get your <strong>private</strong> API key from <a href="https://www.klaviyo.com/account#api-keys" target="_blank">https://www.klaviyo.com/account#api-keys</a>.]]></comment>
+                            <comment><![CDATA[You can get your <strong>private</strong> API key from <a href="https://www.klaviyo.com/account#api-keys-tab" target="_blank">https://www.klaviyo.com/account#api-keys-tab</a>.]]></comment>
                         </private_api_key>
                         <subscription_list translate="label comment">
                             <label>General Subscription List</label>
@@ -76,6 +75,59 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Normally, this should be <strong>Yes</strong>. Abuse of the double opt-in option may cause your account to be suspended.]]></comment>
                         </require_double_optin>
+                        <consumer_key translate="label">
+                            <label>Consumer Key</label>
+                            <frontend_model>klaviyo_reclaim/oauth_credential_renderer</frontend_model>
+                            <frontend_type>text</frontend_type>
+                            <disabled>true</disabled>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </consumer_key>
+                        <consumer_secret translate="label">
+                            <label>Consumer Secret</label>
+                            <frontend_model>klaviyo_reclaim/oauth_credential_renderer</frontend_model>
+                            <frontend_type>text</frontend_type>
+                            <disabled>true</disabled>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </consumer_secret>
+                        <authorization_token translate="label">
+                            <label>Authorization Token</label>
+                            <frontend_model>klaviyo_reclaim/oauth_credential_renderer</frontend_model>
+                            <frontend_type>text</frontend_type>
+                            <disabled>true</disabled>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </authorization_token>
+                        <authorization_secret translate="label">
+                            <label>Authorization Secret</label>
+                            <frontend_model>klaviyo_reclaim/oauth_credential_renderer</frontend_model>
+                            <frontend_type>text</frontend_type>
+                            <disabled>true</disabled>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </authorization_secret>
+                        <generate_tokens_button translate="label">
+                            <label></label>
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>klaviyo_reclaim/adminhtml_system_config_form_button</frontend_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </generate_tokens_button>
                     </fields>
                 </general>
             </groups>

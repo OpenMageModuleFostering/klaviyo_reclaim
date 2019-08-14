@@ -3,7 +3,7 @@
     "type": "magento-module",
     "license": "Open-Software-License-(OSL)",
     "homepage": "",
-    "description": "A Magento extension to connect to the Klaviyo email marketing platform.",
+    "description": "Officially supported Magento extension for the Klaviyo marketing platform.",
     "authors": [
     {
         "name": "Klaviyo Team",

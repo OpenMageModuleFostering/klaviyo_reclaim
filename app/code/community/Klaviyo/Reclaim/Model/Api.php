@@ -123,7 +123,7 @@ class Klaviyo_Reclaim_Model_Api
      * @return void
      */
     protected function _logApiRequest($data) {
-        Mage::log($data);
+        Mage::log($data, Zend_Log::INFO, Mage::helper('klaviyo_reclaim')->getLogFile());
     }
 
 }

@@ -66,6 +66,7 @@ class Klaviyo_Reclaim_Model_KlaviyoApi
 
     function lists($page=0, $count=50) {
         $params = array();
+        $params['type'] = 'list';
         $params['page'] = $page;
         $params['count'] = $count;
         return $this->callServer('GET', 'lists', $params);
@@ -107,7 +108,7 @@ class Klaviyo_Reclaim_Model_KlaviyoApi
             $client->setParameterPost($params);
         } else {
             $client->setRawData(http_build_query($params));
-        } 
+        }
 
         try {
             $response = $client->request();

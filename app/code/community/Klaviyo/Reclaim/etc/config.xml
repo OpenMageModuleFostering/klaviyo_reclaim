@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Klaviyo_Reclaim>
-            <version>1.3.5</version>
+            <version>1.6.2</version>
         </Klaviyo_Reclaim>
     </modules>
     <global>
@@ -25,15 +25,6 @@
                     </klaviyo_subscribe_delete_observer>
                 </observers>
             </newsletter_subscriber_delete_after>
-            <customer_save_after>
-                <observers>
-                    <klaviyo_update_customer>
-                        <type>singleton</type>
-                        <class>Klaviyo_Reclaim_Model_Observer</class>
-                        <method>syncCustomer</method>
-                    </klaviyo_update_customer>
-                </observers>
-            </customer_save_after>
         </events>
         <models>
             <klaviyo_reclaim>
@@ -48,6 +39,9 @@
                     </checkout>
                 </entities>
             </reclaim_mysql4>
+            <reclaim>
+                <class>Klaviyo_Reclaim_Model</class>
+            </reclaim>
         </models>
         <helpers>
             <klaviyo_reclaim>
@@ -68,7 +62,17 @@
             </klaviyo_reclaim_setup>
         </resources>
     </global>
-
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Klaviyo_Reclaim after="Mage_Adminhtml">Klaviyo_Reclaim</Klaviyo_Reclaim>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <adminhtml>
         <layout>
             <updates>
@@ -78,7 +82,6 @@
             </updates>
         </layout>
     </adminhtml>
-
     <frontend>
         <routers>
             <klaviyo_reclaim>

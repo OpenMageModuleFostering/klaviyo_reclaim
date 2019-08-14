@@ -40,4 +40,9 @@
             <block type="klaviyo_reclaim/checkout_monitor" name="klaviyo_reclaim.checkout_monitor" template="klaviyoreclaim/checkout/monitor.phtml" />
         </reference>
     </fancycheckout_index_index>
+    <anattadesign_awesomecheckout_onepage_index>
+        <reference name="before_body_end">
+            <block type="klaviyo_reclaim/checkout_monitor" name="klaviyo_reclaim.checkout_monitor" template="klaviyoreclaim/checkout/monitor.phtml" />
+        </reference>
+    </anattadesign_awesomecheckout_onepage_index>
 </layout>
