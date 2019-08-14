@@ -442,8 +442,7 @@ class Klaviyo_Reclaim_Model_Observer
             }
         }
 
-        $website_id = Mage::getModel('core/store')->load($store_id)->getWebsiteId();
-        $public_api_key = Mage::helper('klaviyo_reclaim')->getPublicApiKey($website_id);
+        $public_api_key = Mage::helper('klaviyo_reclaim')->getPublicApiKey($store_id);
 
         if(!$public_api_key){
             return NULL;
