@@ -1,7 +1,7 @@
 {
-    "name": "OpenMageModuleFostering\/Klaviyo_Reclaim",
+    "name": "openmage-module-fostering\/klaviyo_reclaim",
     "type": "magento-module",
-    "license": "Open-Software-License-(OSL)",
+    "license": "OSL-3.0",
     "homepage": "",
     "description": "Officially supported Magento extension for the Klaviyo marketing platform.",
     "authors": [
