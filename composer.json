@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/Klaviyo_Reclaim",
+    "name": "OpenMageModuleFostering\/Klaviyo_Reclaim",
     "type": "magento-module",
     "license": "Open-Software-License-(OSL)",
     "homepage": "",
     "description": "Officially supported Magento extension for the Klaviyo marketing platform.",
     "authors": [
-    {
-        "name": "Klaviyo Team",
-        "email": "support@klaviyo.com"
-    }
-],
+        {
+            "name": "Klaviyo Team",
+            "email": "support@klaviyo.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
